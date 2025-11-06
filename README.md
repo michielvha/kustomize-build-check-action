@@ -1,11 +1,11 @@
-# Kustomize Build Check
+# Kustomize Build Check Action
 
-[![GitHub Action](https://img.shields.io/badge/action-marketplace-blue.svg)](https://github.com/marketplace/actions/kustomize-build-check)
+<!-- [![GitHub Action](https://img.shields.io/badge/action-marketplace-blue.svg)](https://github.com/marketplace/actions/kustomize-build-check-action) -->
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 Automatically discover and validate Kustomize overlays and bases with intelligent change detection.
 
-## 🚀 Why This Action?
+## Overview
 
 When working with Kustomize in GitOps workflows, changes to a base can break multiple overlays that depend on it. This action:
 
@@ -18,36 +18,19 @@ When working with Kustomize in GitOps workflows, changes to a base can break mul
 - 📊 **Clear feedback**: Shows exactly which builds failed and why
 - 🏗️ **No configuration needed**: Works out of the box with any Kustomize structure
 
-## ⚡ Quick Start
+## Quick Start
 
-```yaml
-name: Validate Kustomize
+checkout the [examples](examples.d/) directory for some common patterns.
 
-on:
-  pull_request:
-    branches: [main]
-
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Required for git diff
-      
-      - uses: michielvha/kustomize-build-check-action@v1
-        with:
-          enable-helm: true
-          fail-on-error: true
-```
-
-That's it! The action will automatically:
+The [basic action](examples.d/basic.yml) will automatically:
 1. Detect what files changed in your PR
 2. Find all Kustomize dependencies
 3. Test only the affected overlays
 4. Report clear results
 
-## 📊 Example Output
+## Example Output
+
+<!-- TODO: change to a picture -->
 
 ```
 🔍 Kustomize Build Check
@@ -79,7 +62,7 @@ Summary: 2 successful, 1 failed
 ❌ Some builds failed
 ```
 
-## 📋 Inputs
+## Inputs
 
 | Input | Description | Default | Required |
 |-------|-------------|---------|----------|
@@ -88,7 +71,7 @@ Summary: 2 successful, 1 failed
 | `fail-on-error` | Fail workflow if any build fails | `true` | No |
 | `root-dir` | Root directory to search for Kustomize files | `.` | No |
 
-## 📤 Outputs
+## Outputs
 
 | Output | Description |
 |--------|-------------|
@@ -96,19 +79,28 @@ Summary: 2 successful, 1 failed
 | `failed-count` | Number of failed builds |
 | `success-count` | Number of successful builds |
 
-## 💡 How It Works
+## How It Works
 
-### Smart Impact Analysis
+the **smart impact analysis** behaves as follows:
+```mermaid
+flowchart TD
+    A[Changed file<br/>base/common/deployment.yaml]
+    B{Detect references<br/>via dependency graph}
+    C1[overlays/dev]
+    C2[overlays/staging]
+    C3[overlays/prod]
+    D[kustomize build --enable-helm<br/>runs for impacted overlays]
 
+    A --> B
+    B --> C1
+    B --> C2
+    B --> C3
+    C1 --> D
+    C2 --> D
+    C3 --> D
 ```
-Changed: base/common/deployment.yaml
-  ↓
-Detects: base/common is referenced by 3 overlays
-  ↓
-Tests: overlays/dev, overlays/prod, overlays/staging
-```
 
-The action intelligently determines what to test:
+The kustomize build binary intelligently determines what to test:
 
 1. **Change Detection**: Uses `git diff` to find modified files between your branch and the base
 2. **Discovery**: Recursively finds all `kustomization.yaml` files in your repository
@@ -124,44 +116,19 @@ The action intelligently determines what to test:
 - **Resource changes** → Any kustomization referencing that resource is tested
 - **No changes to Kustomize files** → Nothing is tested (fast pass)
 
-## 📚 Examples
-
-### Basic PR Validation
-
-```yaml
-name: Kustomize Build Check
-
-on:
-  pull_request:
-    branches: [main]
-    paths:
-      - '**.yaml'
-      - '**.yml'
-
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Required for change detection
-      
-      - uses: michielvha/kustomize-build-check-action@v1
-```
-
-### Custom Base Reference
+## Custom Base Reference
 
 Compare against a specific branch or commit:
 
 ```yaml
-- uses: michielvha/kustomize-build-check-action@v1
+- uses: michielvha/kustomize-build-check-action@main
   with:
     base-ref: ${{ github.event.pull_request.base.sha }}
 ```
 
-### Continue on Error
+## use the output
 
-Don't fail the workflow, but capture results:
+output may be used in subsequent steps
 
 ```yaml
 - name: Validate Kustomize
@@ -180,7 +147,7 @@ Don't fail the workflow, but capture results:
     echo '${{ steps.kustomize-check.outputs.results }}' | jq '.'
 ```
 
-### Specific Directory
+## Specific Directory
 
 Only check Kustomize files in a specific directory:
 
@@ -190,39 +157,7 @@ Only check Kustomize files in a specific directory:
     root-dir: ./kubernetes
 ```
 
-### Monorepo with Multiple Apps
-
-Test multiple application directories independently:
-
-```yaml
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        app: [frontend, backend, worker]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Validate ${{ matrix.app }}
-        uses: michielvha/kustomize-build-check-action@v1
-        with:
-          root-dir: ./apps/${{ matrix.app }}
-```
-
-### Disable Helm Support
-
-If you don't use Helm charts:
-
-```yaml
-- uses: michielvha/kustomize-build-check-action@v1
-  with:
-    enable-helm: false
-```
-
-## 🏗️ Supported Repository Structures
+## Supported Repository Structures
 
 Works with any Kustomize structure out of the box:
 
@@ -266,14 +201,7 @@ manifests/
     └── cluster-2/
 ```
 
-## 🔒 Security & Performance
-
-✅ **Pre-built Images**: Uses verified, multi-architecture images from GitHub Container Registry  
-✅ **Fast Execution**: No build time, pulls cached images  
-✅ **Minimal Permissions**: Only needs repository read access  
-✅ **Isolated**: Runs in Docker container, doesn't modify your repository  
-
-## 🛠️ Under the Hood
+## Under the Hood
 
 This action uses pre-built Docker images from the [kustomize-build-check](https://github.com/michielvha/kustomize-build-check) tool repository.
 
@@ -287,20 +215,19 @@ This action uses pre-built Docker images from the [kustomize-build-check](https:
 - Easy version pinning
 - Multi-architecture support (linux/amd64, linux/arm64)
 
-## 🔗 Related Projects
+## Security & Performance
+
+✅ **Pre-built Images**: Uses verified, multi-architecture images from GitHub Container Registry, pinned using SHA to ensure immutable version.  
+✅ **Fast Execution**: No build time, pulls cached image.  
+✅ **Minimal Permissions**: Only needs repository read access.  
+✅ **Isolated**: Runs in Docker container, doesn't modify your repository.  
+
+## Related Projects
 
 - [kustomize-build-check](https://github.com/michielvha/kustomize-build-check) - Source code and CLI tool
 - [Kustomize](https://github.com/kubernetes-sigs/kustomize) - Kubernetes native configuration management
 - [Helm](https://helm.sh/) - The package manager for Kubernetes
 
-## 📄 License
-
-MIT
-
-## 🤝 Contributing
+## Contributing
 
 Found a bug or have a feature request? Please open an issue in the [tool repository](https://github.com/michielvha/kustomize-build-check/issues).
-
----
-
-**Made with ❤️ for the GitOps community**

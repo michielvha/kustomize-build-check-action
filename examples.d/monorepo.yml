@@ -48,7 +48,7 @@ jobs:
           fetch-depth: 0
       
       - name: Validate ${{ matrix.project }}
-        uses: michielvha/kustomize-build-check@v1
+        uses: michielvha/kustomize-build-check-action@main
         with:
           root-dir: ${{ matrix.project }}
           enable-helm: true

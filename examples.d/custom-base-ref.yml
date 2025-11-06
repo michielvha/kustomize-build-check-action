@@ -25,7 +25,7 @@ jobs:
           echo "ref=${{ github.event.pull_request.base.sha }}" >> $GITHUB_OUTPUT
       
       - name: Run Kustomize Build Check
-        uses: michielvha/kustomize-build-check@v1
+        uses: michielvha/kustomize-build-check-action@main
         with:
           base-ref: ${{ steps.base.outputs.ref }}
           enable-helm: true

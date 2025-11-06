@@ -19,7 +19,7 @@ jobs:
       
       - name: Run Kustomize Build Check
         id: kustomize
-        uses: michielvha/kustomize-build-check@v1
+        uses: michielvha/kustomize-build-check-action@main
         with:
           enable-helm: true
           fail-on-error: false  # Don't fail the workflow

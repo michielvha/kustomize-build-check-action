@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0  # Required for git diff
       
       - name: Run Kustomize Build Check
-        uses: michielvha/kustomize-build-check@v1
+        uses: michielvha/kustomize-build-check-action@main
         with:
           enable-helm: true
           fail-on-error: true

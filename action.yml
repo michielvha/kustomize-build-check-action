@@ -3,7 +3,7 @@ description: 'Automatically discover and validate Kustomize overlays and bases w
 author: 'michielvha'
 
 branding:
-  icon: 'check-circle'
+  icon: 'anchor'
   color: 'blue'
 
 inputs:
@@ -39,4 +39,4 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/michielvha/kustomize-build-check:latest'
+  image: 'docker://ghcr.io/michielvha/kustomize-build-check:feb72166bd0ddfde6ea71c8e0283e0814011b0fd'

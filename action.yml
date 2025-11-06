@@ -1,0 +1,42 @@
+name: 'Kustomize Build Check'
+description: 'Automatically discover and validate Kustomize overlays and bases with smart change detection'
+author: 'michielvha'
+
+branding:
+  icon: 'check-circle'
+  color: 'blue'
+
+inputs:
+  base-ref:
+    description: 'Base git reference to compare against (default: auto-detect from PR or HEAD~1)'
+    required: false
+    default: ''
+  
+  enable-helm:
+    description: 'Enable Helm chart inflation in Kustomize builds'
+    required: false
+    default: 'true'
+  
+  fail-on-error:
+    description: 'Fail the workflow if any Kustomize build fails'
+    required: false
+    default: 'true'
+  
+  root-dir:
+    description: 'Root directory to search for Kustomize files'
+    required: false
+    default: '.'
+
+outputs:
+  results:
+    description: 'JSON output of all build results'
+  
+  failed-count:
+    description: 'Number of failed builds'
+  
+  success-count:
+    description: 'Number of successful builds'
+
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/michielvha/kustomize-build-check:latest'

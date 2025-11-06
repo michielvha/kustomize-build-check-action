@@ -24,3 +24,4 @@ jobs:
         with:
           enable-helm: true
           fail-on-error: true
+          base-ref: ${{ github.event.pull_request.base.sha || 'HEAD~1' }} # great to capture all changes in pull request not just the latest commit, safe fallback to the defaul (latest commit only) when it's not a pull request

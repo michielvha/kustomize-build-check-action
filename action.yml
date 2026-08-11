@@ -37,6 +37,9 @@ outputs:
   success-count:
     description: 'Number of successful builds'
 
+  skipped-count:
+    description: 'Number of paths skipped because they no longer exist (deleted or renamed by the change)'
+
 runs:
   using: 'docker'
   image: 'docker://ghcr.io/michielvha/kustomize-build-check:22ee5ddc794ee44ffe993043d604d0a1b1b981f5'

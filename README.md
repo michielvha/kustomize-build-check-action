@@ -78,6 +78,18 @@ Summary: 2 successful, 1 failed
 | `results` | JSON array of all build results |
 | `failed-count` | Number of failed builds |
 | `success-count` | Number of successful builds |
+| `skipped-count` | Number of paths skipped because the change removed them |
+
+### Skipped paths
+
+A change that deletes or renames a kustomize directory leaves the old path in
+the git diff, but there is nothing left to build there. Those paths are reported
+as skipped and counted separately, so consolidating or removing overlays does
+not fail the check.
+
+Skipping applies only to paths that no longer exist. A directory that is still
+present but no longer builds, including one that has lost its kustomization
+file, is still reported as a failure.
 
 ## How It Works
 
@@ -142,6 +154,7 @@ output may be used in subsequent steps
   run: |
     echo "Failed builds: ${{ steps.kustomize-check.outputs.failed-count }}"
     echo "Successful builds: ${{ steps.kustomize-check.outputs.success-count }}"
+    echo "Skipped paths: ${{ steps.kustomize-check.outputs.skipped-count }}"
     
     # Parse JSON results
     echo '${{ steps.kustomize-check.outputs.results }}' | jq '.'

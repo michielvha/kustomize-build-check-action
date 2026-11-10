@@ -55,4 +55,4 @@ outputs:
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/michielvha/kustomize-build-check:45a35af76cff3e0cdee1654a99b9c268d360a078'
+  image: 'docker://ghcr.io/michielvha/kustomize-build-check:705573a7518c2afce73bdfa38c57beabbb6c10f6'

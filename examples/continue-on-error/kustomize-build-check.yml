@@ -13,13 +13,13 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
       
       - name: Run Kustomize Build Check
         id: kustomize
-        uses: michielvha/kustomize-build-check-action@main
+        uses: michielvha/kustomize-build-check-action@1f6741ad83e022f8393386c10e9a95b578869989 # v2.1.0
         with:
           enable-helm: true
           fail-on-error: false  # Don't fail the workflow
@@ -27,7 +27,7 @@ jobs:
       
       - name: Comment on PR with Results
         if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const successCount = '${{ steps.kustomize.outputs.success-count }}';

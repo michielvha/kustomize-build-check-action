@@ -68,8 +68,9 @@ in [action.yml](action.yml). It needs no token. The source, design documents and
 
 ## Development and releases
 
-`bun test` checks that every example uses the action and passes only the inputs and reads only the
-outputs that [action.yml](action.yml) declares. CI also runs the action against
+`bun test` checks that every example uses the action, passes only the inputs and reads only the
+outputs that [action.yml](action.yml) declares, and pins each action to a commit SHA with its release
+tag. Renovate keeps those pins current. CI also runs the action against
 [tests/fixture](tests/fixture/) and expects two successful builds and one failure.
 
 A push to `main` releases through the shared

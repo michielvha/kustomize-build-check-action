@@ -1,0 +1,46 @@
+name: Test
+
+# The checks that must pass before release.yml tags. Called by release.yml and
+# by nothing else, so the tests are defined once.
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  examples:
+    name: Examples match action.yml
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun test
+
+  smoke:
+    name: Action runs against the fixture
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Diffing against the empty tree marks every file as changed, so each
+      # fixture kustomization is built. tests/fixture/broken must fail.
+      - id: check
+        uses: ./
+        with:
+          base-ref: 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+          root-dir: tests/fixture
+          fail-on-error: false
+      - name: Expect two successful builds and one failure
+        env:
+          SUCCESS: ${{ steps.check.outputs.success-count }}
+          FAILED: ${{ steps.check.outputs.failed-count }}
+        run: |
+          echo "success-count=$SUCCESS failed-count=$FAILED"
+          [ "$SUCCESS" = 2 ] && [ "$FAILED" = 1 ]

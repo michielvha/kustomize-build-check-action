@@ -8,7 +8,7 @@ branding:
 
 inputs:
   base-ref:
-    description: 'Base git reference to compare against (default: auto-detect from PR or HEAD~1)'
+    description: 'Base git reference to compare against. When empty, HEAD~1 (the last commit only); pass github.event.pull_request.base.sha to check a whole pull request'
     required: false
     default: ''
   

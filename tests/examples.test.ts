@@ -76,6 +76,18 @@ for (const scenario of scenarios) {
       expect(actionSteps.length).toBeGreaterThan(0);
     });
 
+    // The YAML parser drops comments, so the tag comment is read from the text.
+    test("pins every action to a commit SHA with its release tag", () => {
+      const unpinned = workflows.flatMap((file) =>
+        readFileSync(join(dir, file), "utf8")
+          .split("\n")
+          .filter((line) => /^\s*(-\s+)?uses:/.test(line))
+          .filter((line) => !/uses:\s+[\w.-]+\/[\w./-]+@[0-9a-f]{40} # v\d+\.\d+\.\d+\s*$/.test(line))
+          .map((line) => `${file}: ${line.trim()}`),
+      );
+      expect(unpinned).toEqual([]);
+    });
+
     for (const { where, job, step } of actionSteps) {
       test(`${where} passes only declared inputs`, () => {
         const unknown = Object.keys(step.with ?? {}).filter((name) => !inputs.has(name));

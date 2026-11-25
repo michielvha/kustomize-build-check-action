@@ -14,7 +14,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
       
@@ -43,12 +43,12 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           fetch-depth: 0
       
       - name: Validate ${{ matrix.project }}
-        uses: michielvha/kustomize-build-check-action@main
+        uses: michielvha/kustomize-build-check-action@1f6741ad83e022f8393386c10e9a95b578869989 # v2.1.0
         with:
           root-dir: ${{ matrix.project }}
           enable-helm: true

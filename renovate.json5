@@ -1,6 +1,11 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: ['config:recommended', 'helpers:pinGitHubActionDigests'],
+  // The examples are copied whole into callers' workflows, so their pins,
+  // including this action's own, are kept current like ours.
+  'github-actions': {
+    managerFilePatterns: ['/^examples/.+\\.ya?ml$/'],
+  },
   packageRules: [
     {
       matchManagers: ['github-actions'],

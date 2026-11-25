@@ -65,3 +65,15 @@ builds is a failure. So is a build that runs longer than `build-timeout`.
 The action runs a prebuilt image from `ghcr.io/michielvha/kustomize-build-check`, pinned by commit SHA
 in [action.yml](action.yml). It needs no token. The source, design documents and issue tracker are in
 [kustomize-build-check](https://github.com/michielvha/kustomize-build-check).
+
+## Development and releases
+
+`bun test` checks that every example uses the action and passes only the inputs and reads only the
+outputs that [action.yml](action.yml) declares. CI also runs the action against
+[tests/fixture](tests/fixture/) and expects two successful builds and one failure.
+
+A push to `main` releases through the shared
+[gh-release-workflow](https://github.com/vhco-pro/gh-release-workflow), after those tests pass.
+GitVersion picks the next version from the Conventional Commit messages and tags it `vX.Y.Z`. Pin a
+release by its commit SHA with the tag as a comment, for example
+`uses: michielvha/kustomize-build-check-action@<commit sha> # vX.Y.Z`.

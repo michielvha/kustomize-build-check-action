@@ -1,0 +1,5 @@
+# Deliberately broken: the smoke test expects exactly one failed build.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - missing.yaml

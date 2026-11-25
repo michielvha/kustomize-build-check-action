@@ -1,6 +1,6 @@
 # kustomize-build-check-action
 
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 A GitHub Action that runs `kustomize build` on the Kustomize overlays a change affects. A change to a
 base builds every overlay that uses it. A change to an overlay builds only that overlay. Helm charts

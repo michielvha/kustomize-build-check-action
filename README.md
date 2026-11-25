@@ -1,5 +1,7 @@
 # kustomize-build-check-action
 
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A GitHub Action that runs `kustomize build` on the Kustomize overlays a change affects. A change to a
 base builds every overlay that uses it. A change to an overlay builds only that overlay. Helm charts
 are inflated by default.
@@ -35,6 +37,24 @@ The action finds every `kustomization.yaml`, `kustomization.yml` and `Kustomizat
 Every marked kustomization is built, along with everything that depends on it. A changed file that
 no kustomization references builds nothing. A kustomization the action cannot fully parse is built
 on every run.
+
+```mermaid
+flowchart TD
+    A[Changed file<br/>base/common/deployment.yaml]
+    B{Detect references<br/>via dependency graph}
+    C1[overlays/dev]
+    C2[overlays/staging]
+    C3[overlays/prod]
+    D[kustomize build --enable-helm<br/>runs for impacted overlays]
+
+    A --> B
+    B --> C1
+    B --> C2
+    B --> C3
+    C1 --> D
+    C2 --> D
+    C3 --> D
+```
 
 Some paths are skipped and counted in `skipped-count`: directories the change deleted or renamed, and
 kustomize Components, which only build through a parent. A directory that still exists but no longer

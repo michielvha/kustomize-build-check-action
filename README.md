@@ -10,11 +10,11 @@ are inflated by default.
 
 Copy one of the example workflows into `.github/workflows/`:
 
-- [basic.yml](examples.d/basic.yml) checks every pull request.
-- [custom-base-ref.yml](examples.d/custom-base-ref.yml) compares against the pull request's base commit.
-- [continue-on-error.yml](examples.d/continue-on-error.yml) keeps the job green and posts the counts as a pull request comment.
-- [monorepo.yml](examples.d/monorepo.yml) runs one job per changed project directory.
-- [with-kubeconform.yml](examples.d/with-kubeconform.yml) validates the built manifests against Kubernetes schemas afterwards.
+- [basic](examples/basic/kustomize-build-check.yml) checks every pull request.
+- [custom-base-ref](examples/custom-base-ref/kustomize-build-check.yml) compares against the pull request's base commit.
+- [continue-on-error](examples/continue-on-error/kustomize-build-check.yml) keeps the job green and posts the counts as a pull request comment.
+- [monorepo](examples/monorepo/kustomize-build-check.yml) runs one job per changed project directory.
+- [with-kubeconform](examples/with-kubeconform/kustomize-build-check.yml) validates the built manifests against Kubernetes schemas afterwards.
 
 [action.yml](action.yml) lists the inputs and outputs with their defaults.
 
